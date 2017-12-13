@@ -12,7 +12,7 @@ extends RigidBody2D
 export (String) var input_steer_left = "steer_left"
 export (String) var input_steer_right = "steer_right"
 export (String) var input_accelerate = "accelerate"
-export (String) var input_break = "break"
+export (String) var input_brake = "brake"
 
 # Joystick Deadzone Thresholds
 var stick_min = 0.07 # If the axis is smaller, behave as if it were 0
@@ -43,13 +43,10 @@ func _ready():
 	# Added steering_damp since it may not be obvious at first glance that
 	# you can simply change angular_damp to get the same effect
 	set_angular_damp(steering_damp)
-	
-	# Enable fixed process
-	set_fixed_process(true)
 
 
 # Fixed Process
-func _fixed_process(delta):
+func _physics_process(delta):
 	# Drag (0 means we will never slow down ever. Like being in space.)
 	_velocity *= drag_coefficient
 	
@@ -60,13 +57,13 @@ func _fixed_process(delta):
 			# If we exceed max stick velocity, begin sliding on the road
 			if(get_right_velocity().length() > drift_extremum):
 				_drift_factor = wheel_grip_slippery
-				# print("SLIDING!")
+				#print("SLIDING!")
 		# If we are sliding on the road
 		else:
 			# If our side velocity is less than the drift asymptote, begin sticking to the road
 			if(get_right_velocity().length() < drift_asymptote):
 				_drift_factor = wheel_grip_sticky
-				# print("STICKING!")
+				#print("STICKING!")
 
 	# Add drift to velocity
 	_velocity = get_up_velocity() + (get_right_velocity() * _drift_factor)
@@ -80,7 +77,7 @@ func _fixed_process(delta):
 		
 		_velocity += get_up() * acceleration * axis
 	# Break / Reverse
-	elif(Input.is_action_pressed(input_break)):
+	elif(Input.is_action_pressed(input_brake)):
 		# TODO: Find a better way to handle this instead of hard-coding the check for Triggers
 		var axis = Input.get_joy_axis(0, 6) # Left Trigger
 		if(axis == 0): 
@@ -95,7 +92,7 @@ func _fixed_process(delta):
 	# and rotate it to the same amount our vehicle is rotated.
 	# Then we keep the magnitude of that direction which allows
 	# us to calculate the max allowed velocity in that direction.
-	var max_speed = (Vector2(0, -1) * max_forward_velocity).rotated(get_rot())
+	var max_speed = (Vector2(0, -1) * max_forward_velocity).rotated(get_rotation())
 	var x = clamp(_velocity.x, -abs(max_speed.x), abs(max_speed.x))
 	var y = clamp(_velocity.y, -abs(max_speed.y), abs(max_speed.y))
 	_velocity = Vector2(x, y)
@@ -126,11 +123,11 @@ func _fixed_process(delta):
 
 # Returns up direction (vehicle's forward direction)
 func get_up():
-	return Vector2(cos(get_rot() + PI/2.0), sin(get_rot() - PI/2.0))
+	return Vector2(cos(-get_rotation() + PI/2.0), sin(-get_rotation() - PI/2.0))
 
 # Returns right direction
 func get_right():
-	return Vector2(cos(get_rot()), sin(-get_rot()))
+	return Vector2(cos(-get_rotation()), sin(get_rotation()))
 
 # Returns up velocity (vehicle's forward velocity)
 func get_up_velocity():

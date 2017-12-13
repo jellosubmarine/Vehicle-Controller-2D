@@ -1,0 +1,16 @@
+[application]
+
+icon = "res://icon.png"
+name = "testprog"
+
+[input]
+
+accelerate = [ InputEvent(KEY,16777232) ]
+brake = [ InputEvent(KEY,16777234) ]
+steer_left = [ InputEvent(KEY,16777231) ]
+steer_right = [ InputEvent(KEY,16777233) ]
+
+[physics_2d]
+
+motion_fix_enabled = true
+
