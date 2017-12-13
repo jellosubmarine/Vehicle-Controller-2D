@@ -1,4 +1,4 @@
-# Vehicle Controller 2D Plugin for Godot Engine
+# Vehicle Controller 2D Plugin for Godot Engine 3.0
 ![](icon.png)
 
 A 2D top-down vehicle controller node.
