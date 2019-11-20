@@ -1,4 +1,4 @@
-# Vehicle Controller 2D Plugin for Godot Engine 3.0
+# Vehicle Controller 2D Plugin for Godot Engine 3.x
 ![](icon.png)
 
 A 2D top-down vehicle controller node.
@@ -16,7 +16,6 @@ A demo scene is included.
 ## Screenshot
 ![](https://i.imgur.com/EaS5zjf.png)
 ![](https://i.imgur.com/gYSPj44.png)
-
 
 ## License
 
