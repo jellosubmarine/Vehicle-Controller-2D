@@ -100,24 +100,42 @@ func _physics_process(delta):
 	# Torque depends that the vehicle is moving
 	var torque = lerp(0, steering_torque, _velocity.length() / max_forward_velocity)
 	
+	print(_velocity.rotated(-get_rotation()))
 	# Steer Left
-	if(Input.is_action_pressed(input_steer_left)):
-		# TODO: Find a better way to handle this instead of hard-coding the check for Left Stick Axis
-		var axis = Input.get_joy_axis(0, 0) # Left Stick Axis
-		if(axis < stick_min):
-			axis = 1 # Set it to 1 since we are not using the left stick
+	if(_velocity.rotated(-get_rotation()).y < 0):
+		if(Input.is_action_pressed(input_steer_left)):
+			# TODO: Find a better way to handle this instead of hard-coding the check for Left Stick Axis
+			var axis = Input.get_joy_axis(0, 0) # Left Stick Axis
+			if(axis < stick_min):
+				axis = 1 # Set it to 1 since we are not using the left stick
+			
+			set_angular_velocity(-torque * abs(axis))
 		
-		set_angular_velocity(-torque * abs(axis))
-	
-	# Steer Right
-	elif(Input.is_action_pressed(input_steer_right)):
-		# TODO: Find a better way to handle this instead of hard-coding the check for Left Stick Axis
-		var axis = Input.get_joy_axis(0, 0) # Left Stick Axis
-		if(axis < stick_min):
-			axis = 1 # Set it to 1 since we are not using the left stick
+		# Steer Right
+		elif(Input.is_action_pressed(input_steer_right)):
+			# TODO: Find a better way to handle this instead of hard-coding the check for Left Stick Axis
+			var axis = Input.get_joy_axis(0, 0) # Left Stick Axis
+			if(axis < stick_min):
+				axis = 1 # Set it to 1 since we are not using the left stick
+			
+			set_angular_velocity(torque * abs(axis))
+	elif(_velocity.rotated(-get_rotation()).y > 0):
+		if(Input.is_action_pressed(input_steer_left)):
+			# TODO: Find a better way to handle this instead of hard-coding the check for Left Stick Axis
+			var axis = Input.get_joy_axis(0, 0) # Left Stick Axis
+			if(axis < stick_min):
+				axis = 1 # Set it to 1 since we are not using the left stick
+			
+			set_angular_velocity(torque * abs(axis))
 		
-		set_angular_velocity(torque * abs(axis))
-	
+		# Steer Right
+		elif(Input.is_action_pressed(input_steer_right)):
+			# TODO: Find a better way to handle this instead of hard-coding the check for Left Stick Axis
+			var axis = Input.get_joy_axis(0, 0) # Left Stick Axis
+			if(axis < stick_min):
+				axis = 1 # Set it to 1 since we are not using the left stick
+			
+			set_angular_velocity(-torque * abs(axis))
 	# Apply the force
 	set_linear_velocity(_velocity)
 
